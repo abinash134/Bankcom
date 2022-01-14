@@ -11,7 +11,7 @@ class UserInput extends StatefulWidget {
 class _UserInputState extends State<UserInput> {
   PersonalProfileBody pb = PersonalProfileBody();
   int _index = 0;
-  List<String> mainsteps = ["personalProfile",""];
+  List<String> mainsteps = ["personalProfile","savings"];
   List<Function> confirmFuncs = [];
   @override
   Widget build(BuildContext context) {
@@ -32,17 +32,9 @@ class _UserInputState extends State<UserInput> {
           });
         }
       },
-      onStepTapped: (int index) {
-        setState(() {
-          _index = index;
-        });
-      },
       steps: <Step>[
         personalProfile(mainsteps.indexOf("personalProfile")==_index),
-        const Step(
-          title: Text('Step 2 title'),
-          content: Text('Content for Step 2'),
-        ),
+        savingsProfile(mainsteps.indexOf("savings")==_index),
       ],
     );
   }
@@ -54,6 +46,13 @@ Step personalProfile(bool isactive){
     isActive:isactive,
     title: const Text('PERSONAL PROFILE'),
     content: PersonalProfileBody(),
+  );
+}
+Step savingsProfile(bool isactive){
+  return Step(
+    isActive:isactive,
+    title: Text('Savings'),
+    content: Text('Content for Step 2'),
   );
 }
 

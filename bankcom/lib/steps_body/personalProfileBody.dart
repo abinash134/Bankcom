@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 
 
 enum Gender { Male, Felmale ,Other}
+enum Married { yes, no }
 class PersonalProfileBody extends StatefulWidget {
   const PersonalProfileBody({Key? key}) : super(key: key);
 
@@ -15,11 +16,33 @@ class PersonalProfileBody extends StatefulWidget {
 }
 
 class _PersonalProfileBodyState extends State<PersonalProfileBody> {
+  int dropdownValue = 1;
+  int noofChildren = 0;
+  void makechildrenlistForAge(){
+    for(var i=0;i<noofChildren;i++){
+      childrenListForage.add(
+        Container(
+          width: 250,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text("${childrenIndex[i]} child"),
 
+              SizedBox(height: 30,width: 100,child: TextFormField()),
+            ],
+          ),
+        )
+      );
+    }
+  }
+  List<Widget> childrenListForage = [];
+  List<String> childrenIndex = ["1st","2nd","3rd","4th"];
   TextEditingController _firstnameController = TextEditingController();
   TextEditingController _secondnameController = TextEditingController();
   TextEditingController _pannumberController = TextEditingController();
   TextEditingController _ageController = TextEditingController();
+  TextEditingController _zipController = TextEditingController();
+  TextEditingController _spouseageController = TextEditingController();
  void formvalidator(){
     if (_formKey.currentState!.validate()) {
       // If the form is valid, display a snackbar. In the real world,
@@ -31,6 +54,7 @@ class _PersonalProfileBodyState extends State<PersonalProfileBody> {
   }
   final _formKey = GlobalKey<FormState>();
  Gender? _genderGroup = Gender.Male;
+ Married? _marriedgorup = Married.yes;
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -97,6 +121,90 @@ class _PersonalProfileBodyState extends State<PersonalProfileBody> {
                 ),
               ],
             ),
+            headingText("Enter Your Zip Code"),
+            inputTextField("Zip",_zipController),
+            headingText("Are You Married?"),
+            Column(
+              children: [
+                SizedBox(
+                  width: 150,
+                  child: ListTile(
+                    title: const Text('Yes'),
+                    leading: Radio<Married>(
+                      value: Married.yes,
+                      groupValue: _marriedgorup,
+                      onChanged: (Married? value) {
+                        setState(() {
+                          _marriedgorup = value;
+                        });
+                      },
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: 150,
+                  child: ListTile(
+                    title: const Text('No'),
+                    leading: Radio<Married>(
+                      value: Married.no,
+                      groupValue: _marriedgorup,
+                      onChanged: (Married? value) {
+                        setState(() {
+                          _marriedgorup = value;
+                        });
+                      },
+                    ),
+                  ),
+                ),
+
+              ],
+            ),
+            _marriedgorup==Married.yes?headingText("What is your spouse's age?"):Container(),
+            _marriedgorup==Married.yes?inputTextField("Age",_spouseageController):Container(),
+            _marriedgorup==Married.yes?headingText("How many children do you have?"):Container(),
+            _marriedgorup==Married.yes?Container(
+              width: MediaQuery.of(context).size.width-20,
+              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+              decoration: BoxDecoration(
+                  color: Colors.white, borderRadius: BorderRadius.circular(10)),
+              child: DropdownButton<int>(
+                isExpanded:true,
+                value: dropdownValue,
+                icon: const Icon(Icons.arrow_drop_down),
+                iconSize: 42,
+                elevation: 16,
+                style: const TextStyle(color: Colors.deepPurple),
+                underline:  SizedBox(),
+                onChanged: (int? newValue) {
+                  setState(() {
+                    dropdownValue = newValue!;
+                    noofChildren=newValue;
+
+                  });
+                  makechildrenlistForAge();
+                },
+                items: <int>[1, 2, 3, 4]
+                    .map<DropdownMenuItem<int>>((int value) {
+                  return DropdownMenuItem<int>(
+                    value: value,
+                    child: Text("${value}"),
+                  );
+                }).toList(),
+
+              ),
+            ):Container(),
+            _marriedgorup==Married.yes?headingText("How old are your children?"):Container(),
+            _marriedgorup==Married.yes?Column(
+              children: [
+                ListView.builder(
+                    scrollDirection: Axis.vertical,
+                    shrinkWrap: true,
+                    itemCount: childrenListForage.length,
+                    itemBuilder: (context,index){
+                  return childrenListForage[index];
+                })
+              ],
+            ):Container(),
           ],
         ),
       ),
