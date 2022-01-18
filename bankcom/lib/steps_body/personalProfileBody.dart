@@ -44,7 +44,7 @@ class _PersonalProfileBodyState extends State<PersonalProfileBody> {
   TextEditingController _zipController = TextEditingController();
   TextEditingController _spouseageController = TextEditingController();
  void formvalidator(){
-    if (_formKey.currentState!.validate()) {
+    if (_personalformKey.currentState!.validate()) {
       // If the form is valid, display a snackbar. In the real world,
       // you'd often call a server or save the information in a database.
       ScaffoldMessenger.of(context).showSnackBar(
@@ -52,7 +52,7 @@ class _PersonalProfileBodyState extends State<PersonalProfileBody> {
       );
     }
   }
-  final _formKey = GlobalKey<FormState>();
+  final _personalformKey = GlobalKey<FormState>();
  Gender? _genderGroup = Gender.Male;
  Married? _marriedgorup = Married.yes;
   @override
@@ -60,7 +60,7 @@ class _PersonalProfileBodyState extends State<PersonalProfileBody> {
     return SingleChildScrollView(
       scrollDirection: Axis.vertical,
       child: Form(
-        key: _formKey,
+        key: _personalformKey,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
